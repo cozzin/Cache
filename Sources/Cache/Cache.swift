@@ -1,6 +1,12 @@
-public struct Cache {
-    public private(set) var text = "Hello, World!"
+import Foundation
 
+public class Cache<Key, Value> {
+    
     public init() {
+        
+    }
+    
+    func save() {
+        
     }
 }
