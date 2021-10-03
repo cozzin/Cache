@@ -6,7 +6,7 @@ public class Cache<Value>: CacheStorage where Value: Codable {
     
     private let disk: DiskCache<Value>
     
-    init(memory: MemoryCache<Value>, disk: DiskCache<Value>) {
+    init(memory: MemoryCache<Value> = .init(countLimit: 300), disk: DiskCache<Value> = .init()) {
         self.memory = memory
         self.disk = disk
     }
