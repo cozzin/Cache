@@ -1,11 +1,19 @@
 import XCTest
 @testable import Cache
 
-final class MemoryStorageTests: XCTestCase {
+final class DiskCacheTests: XCTestCase {
 
+    private var fileManager: DiskCacheFileManagerFake!
+    
+    override func setUp() {
+        super.setUp()
+        
+        fileManager = DiskCacheFileManagerFake()
+    }
+    
     func testStringCache() throws {
         // given
-        let cache = MemoryCache<String>(countLimit: 1)
+        let cache = DiskCache<String>(fileManager: fileManager)
         
         // when
         try cache.save("MyValue", forKey: "MyKey")
@@ -17,7 +25,7 @@ final class MemoryStorageTests: XCTestCase {
     
     func testIntCache() throws {
         // given
-        let cache = MemoryCache<Int>(countLimit: 1)
+        let cache = DiskCache<Int>(fileManager: fileManager)
         
         // when
         try cache.save(0, forKey: "MyKey")
@@ -29,7 +37,7 @@ final class MemoryStorageTests: XCTestCase {
     
     func testObjectCache() throws {
         // given
-        let cache = MemoryCache<ObjectStub>(countLimit: 1)
+        let cache = DiskCache<ObjectStub>(fileManager: fileManager)
 
         // when
         let object = ObjectStub(value: 0)
@@ -40,17 +48,13 @@ final class MemoryStorageTests: XCTestCase {
         XCTAssertEqual(result!.value, 0)
     }
     
-    func testCountLimit() throws {
+    func testEmptyCache() throws {
         // given
-        let cache = MemoryCache<Int>(countLimit: 1)
-        
-        // when
-        try cache.save(0, forKey: "MyKey0")
-        try cache.save(1, forKey: "MyKey1")
-
+        let cache = DiskCache<String>(fileManager: fileManager)
+                
         // then
-        XCTAssertNil(try cache.value(forKey: "MyKey0"))
-        XCTAssertEqual(try cache.value(forKey: "MyKey1"), 1)
+        let result = try cache.value(forKey: "MyKey")
+        XCTAssertNil(result, "MyValue")
     }
-
+    
 }

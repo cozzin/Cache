@@ -1,12 +1,32 @@
 import Foundation
 
-public class Cache<Key, Value> {
+public class Cache<Value>: CacheStorage where Value: Codable {
     
-    public init() {
-        
+    private let memory: MemoryCache<Value>
+    
+    private let disk: DiskCache<Value>
+    
+    init(memory: MemoryCache<Value>, disk: DiskCache<Value>) {
+        self.memory = memory
+        self.disk = disk
     }
     
-    func save() {
+    public func value(forKey key: String) throws -> Value? {
+        if let memoryValue = try memory.value(forKey: key) {
+            return memoryValue
+        }
         
+        if let diskValue = try disk.value(forKey: key) {
+            try memory.save(diskValue, forKey: key)
+            return diskValue
+        }
+        
+        return nil
     }
+    
+    public func save(_ value: Value, forKey key: String) throws {
+        try memory.save(value, forKey: key)
+        try disk.save(value, forKey: key)
+    }
+    
 }
