@@ -29,7 +29,7 @@ let cache = Cache<CustomObject>(memory: memory, disk: disk)
 
 try cache.save(CustomObject(value: 0), forKey: "MyKey")
 
-let cachedValue = try cache.value(forKey: "MyKey")
+let cached = try cache.value(forKey: "MyKey")
 ```
 
 ## ♻️ Flow
