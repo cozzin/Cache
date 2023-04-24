@@ -11,7 +11,7 @@ public struct DiskCache<Value>: CacheStorage where Value: Codable {
     
     private let fileManager: DiskCacheFileManagable
     
-    init(fileManager: DiskCacheFileManagable = DefaultFileManager()) {
+    public init(fileManager: DiskCacheFileManagable = DefaultFileManager()) {
         self.fileManager = fileManager
     }
     

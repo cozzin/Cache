@@ -7,24 +7,26 @@
 
 import Foundation
 
-struct DefaultFileManager: DiskCacheFileManagable {
+public struct DefaultFileManager: DiskCacheFileManagable {
     
-    func assureDirectoryExists(filePathURL: URL) throws {
+    public init() { }
+    
+    public func assureDirectoryExists(filePathURL: URL) throws {
         if FileManager.default.fileExists(atPath: filePathURL.path) == false {
             try FileManager.default.createDirectory(at: filePathURL.deletingLastPathComponent(), withIntermediateDirectories: true)
         }
     }
     
-    func filePathURL(forKey key: String) throws -> URL {
+    public func filePathURL(forKey key: String) throws -> URL {
         try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             .appendingPathComponent(key)
     }
     
-    func write(_ data: Data, to url: URL) throws {
+    public func write(_ data: Data, to url: URL) throws {
         try data.write(to: url)
     }
     
-    func data(of url: URL) throws -> Data {
+    public func data(of url: URL) throws -> Data {
         try Data(contentsOf: url)
     }
 
